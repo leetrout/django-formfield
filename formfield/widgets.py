@@ -13,11 +13,11 @@ class AdminJSONFieldWidget(AdminTextareaWidget):
         super(AdminJSONFieldWidget, self).__init__(*args, **kwargs)
     
     def render(self, name, value, **kwargs):
-        
+        # try to dump to a string if needed
         if isinstance(value, dict):
             try:
                 value = json.dumps(value)
-            except:
+            except ValueError:
                 pass
         return super(AdminJSONFieldWidget, self).render(name, value, **kwargs)
 
