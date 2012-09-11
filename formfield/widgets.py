@@ -16,7 +16,7 @@ class AdminJSONFieldWidget(AdminTextareaWidget):
         # try to dump to a string if needed
         if isinstance(value, dict):
             try:
-                value = json.dumps(value)
+                value = json.dumps(value, **self.dump_kwargs)
             except ValueError:
                 pass
         return super(AdminJSONFieldWidget, self).render(name, value, **kwargs)
