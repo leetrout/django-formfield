@@ -1,4 +1,26 @@
 from django import forms
+from django.contrib.admin.widgets import AdminTextareaWidget
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import simplejson as json
+
+
+class AdminJSONFieldWidget(AdminTextareaWidget):
+    """Provide value parsing at render time if using the raw JSON field in
+    the admin.
+    """
+    def __init__(self, *args, **kwargs):
+        self.dump_kwargs = kwargs.pop('dump_kwargs', {'cls': DjangoJSONEncoder})
+        super(AdminJSONFieldWidget, self).__init__(*args, **kwargs)
+    
+    def render(self, name, value, **kwargs):
+        
+        if isinstance(value, dict):
+            try:
+                value = json.dumps(value)
+            except:
+                pass
+        return super(AdminJSONFieldWidget, self).render(name, value, **kwargs)
+
 
 class FormFieldWidget(forms.MultiWidget):
     """
